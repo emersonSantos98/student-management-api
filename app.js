@@ -7,18 +7,20 @@ import db from './src/models/index.js';
 
 const app = express();
 
-// Middlewares
+// Middlewares 🛡️
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 
+
 app.use('/api', routes);
 
-// Use the sequelize instance from db
+
 db.sequelize.authenticate()
-    .then(() => console.log('Database connected!'))
-    .catch(err => console.error('Unable to connect to the database:', err));
+    .then(() => console.log('✅ Database connected!'))
+    .catch(err => console.error('❌ Unable to connect to the database:', err));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port http://localhost:${PORT}/api`));
+
