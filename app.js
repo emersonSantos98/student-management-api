@@ -1,9 +1,11 @@
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
-import routes from './routes.js';
-import db from './src/models/index.js';
+'use strict';
+
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const routes = require('./src/routes/index');
+const db = require('./src/models');
 
 const app = express();
 
@@ -13,9 +15,7 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 
-
 app.use('/api', routes);
-
 
 db.sequelize.authenticate()
     .then(() => console.log('✅ Database connected!'))
@@ -23,4 +23,3 @@ db.sequelize.authenticate()
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on port http://localhost:${PORT}/api`));
-
