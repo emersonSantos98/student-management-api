@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const user = require('./userRoutes');
+const userRoutes = require('./userRoutes');
+const studentRoutes = require('./studentRoutes');
 
 router.get('/', (req, res) => {
     res.json({
@@ -12,6 +13,7 @@ router.get('/', (req, res) => {
 });
 
 // Rotas de usuários
-router.use('/users', user);
-
+router.use('/users', userRoutes);
+router.use('/students', studentRoutes);
 module.exports = router;
+
