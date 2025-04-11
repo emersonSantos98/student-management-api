@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const saltRounds = 10;
-    const password = '@123456'; // Senha padrão para demonstração
+    const password = '@123456';
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
     await queryInterface.bulkInsert('Users', [
@@ -20,10 +20,10 @@ module.exports = {
       },
       {
         id: uuidv4(),
-        name: 'Funcionário',
-        email: 'staff@example.com',
+        name: 'Estudante',
+        email: 'student@example.com',
         password_hash: passwordHash,
-        role: 'staff',
+        role: 'student',
         created_at: new Date(),
         updated_at: new Date()
       }
