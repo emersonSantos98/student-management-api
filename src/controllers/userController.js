@@ -199,11 +199,7 @@ class UserController {
 
             await userService.deleteUser(id);
 
-            return res.status(204).json({
-                object: 'user',
-                status: 'success',
-                message: 'Usuário removido com sucesso'
-            });
+            return res.status(204).end();
         } catch (error) {
             next(error);
         }
