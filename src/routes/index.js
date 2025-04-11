@@ -1,7 +1,6 @@
-'use strict';
-
 const express = require('express');
 const router = express.Router();
+const user = require('./userRoutes');
 
 router.get('/', (req, res) => {
     res.json({
@@ -11,5 +10,8 @@ router.get('/', (req, res) => {
         environment: process.env.NODE_ENV || 'development'
     });
 });
+
+// Rotas de usuários
+router.use('/users', user);
 
 module.exports = router;
