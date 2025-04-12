@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Classes', {
+    await queryInterface.createTable('CourseGroups', {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -37,14 +37,14 @@ module.exports = {
       }
     });
 
-    await queryInterface.addIndex('Classes', ['start_date'], {
+    await queryInterface.addIndex('CourseGroups', ['start_date'], {
       name: 'idx_classes_start_date'
     });
-    await queryInterface.addIndex('Classes', ['end_date'], {
+    await queryInterface.addIndex('CourseGroups', ['end_date'], {
       name: 'idx_classes_end_date'
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Classes');
+    await queryInterface.dropTable('CourseGroups');
   }
 };
