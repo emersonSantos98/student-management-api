@@ -2,7 +2,7 @@ const { CourseGroup } = require('../models');
 
 const { NotFoundError } = require('../errors');
 
-class CourseGroupsRepository {
+class CourseGroupRepository {
     async findAll(filters = {}, pagination = {}) {
         const { page = 1, limit = 10 } = pagination;
         const offset = (page - 1) * limit;
@@ -31,10 +31,18 @@ class CourseGroupsRepository {
             const courseGroup = await CourseGroup.findByPk(id);
 
             if (!courseGroup) {
-                throw new NotFoundError('Estudante');
+                throw new NotFoundError('Turma não encontrada');
             }
 
             return courseGroup;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async findByName(name) {
+        try {
+            return await CourseGroup.findOne({ where: { name } });
         } catch (error) {
             throw error;
         }
@@ -74,4 +82,4 @@ class CourseGroupsRepository {
 
 }
 
-module.exports = new CourseGroupsRepository();
+module.exports = new CourseGroupRepository();
