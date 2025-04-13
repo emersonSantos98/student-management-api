@@ -3,6 +3,7 @@ const router = express.Router();
 const userRoutes = require('./userRoutes');
 const studentRoutes = require('./studentRoutes');
 const courseGroupRoutes = require('./courseGroupRoutes');
+const enrollmentRoutes = require('./enrollmentRoutes');
 
 router.get('/', (req, res) => {
     res.json({
@@ -17,5 +18,6 @@ router.get('/', (req, res) => {
 router.use('/users', userRoutes);
 router.use('/students', studentRoutes);
 router.use('/course-groups', courseGroupRoutes);
+router.use('/enrollments', enrollmentRoutes);
 module.exports = router;
 
