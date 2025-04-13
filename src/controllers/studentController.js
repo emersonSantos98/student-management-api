@@ -1,4 +1,5 @@
 const studentService = require('../services/studentService');
+const { Op } = require('sequelize');
 
 class StudentController {
     async getAllStudents(req, res, next) {
