@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            // define association here
+            CourseGroup.hasMany(models.Enrollment, {
+                foreignKey: 'course_group_id',
+                as: 'enrollments'
+            });
         }
     }
     CourseGroup.init({
@@ -50,7 +53,17 @@ module.exports = (sequelize, DataTypes) => {
         modelName: 'CourseGroup',
         tableName: 'CourseGroups',
         timestamps: false,
-        underscored: true
+        underscored: true,
+        indexes: [
+            {
+                name: 'idx_classes_start_date',
+                fields: ['start_date']
+            },
+            {
+                name: 'idx_classes_end_date',
+                fields: ['end_date']
+            }
+        ]
     });
     return CourseGroup;
 };
