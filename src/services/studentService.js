@@ -1,4 +1,6 @@
 const studentRepository = require('../repositories/studentRepository');
+const enrollmentRepository = require('../repositories/enrollmentRepository');
+const courseGroupRepository = require('../repositories/courseGroupRepository');
 const { ValidationError } = require('../errors');
 const { validateStudent } = require('../utils/validateStudent');
 
@@ -29,15 +31,16 @@ class StudentService {
 
     async createStudent(data) {
         try {
-            const validationErrors = validateStudent(data);
+            const { courseGroupIds, ...studentData } = data;
 
+            const validationErrors = validateStudent(studentData);
             if (validationErrors.length > 0) {
                 throw new ValidationError(validationErrors);
             }
 
             const formattedData = {
-                ...data,
-                cpf: data.cpf.replace(/\D/g, '')
+                ...studentData,
+                cpf: studentData.cpf.replace(/\D/g, '')
             };
 
             const existingFields = await studentRepository.checkExistingStudent(formattedData);
@@ -45,7 +48,36 @@ class StudentService {
                 throw new ValidationError(existingFields);
             }
 
-            return await studentRepository.create(formattedData);
+
+            const student = await studentRepository.create(formattedData);
+
+            if (courseGroupIds && Array.isArray(courseGroupIds) && courseGroupIds.length > 0) {
+                const enrollments = [];
+
+                for (const courseGroupId of courseGroupIds) {
+                    const courseGroup = await courseGroupRepository.findById(courseGroupId);
+                    if (!courseGroup) {
+                        throw new ValidationError([
+                            { field: 'courseGroupIds', message: `Turma ${courseGroupId} não encontrada` }
+                        ]);
+                    }
+
+                    const enrollment = await enrollmentRepository.create({
+                        student_id: student.id,
+                        course_group_id: courseGroupId,
+                        status: 'active'
+                    });
+
+                    enrollments.push(enrollment);
+                }
+
+                return {
+                    student,
+                    enrollments
+                };
+            }
+
+            return { student };
         } catch (error) {
             throw error;
         }
@@ -53,7 +85,7 @@ class StudentService {
 
     async updateStudent(id, data) {
         try {
-            const { ra, cpf, ...editableData } = data;
+            const { courseGroupIds, ra, cpf, ...editableData } = data;
 
             if (ra !== undefined || cpf !== undefined) {
                 const errors = [];
@@ -83,7 +115,37 @@ class StudentService {
                 }
             }
 
-            return await studentRepository.update(id, editableData);
+            const updatedStudent = await studentRepository.update(id, editableData);
+
+            if (courseGroupIds && Array.isArray(courseGroupIds)) {
+                const enrollments = [];
+
+                for (const courseGroupId of courseGroupIds) {
+                    const courseGroup = await courseGroupRepository.findById(courseGroupId);
+                    if (!courseGroup) {
+                        throw new ValidationError([
+                            { field: 'courseGroupIds', message: `Turma ${courseGroupId} não encontrada` }
+                        ]);
+                    }
+
+                    const existingEnrollment = await enrollmentRepository.findByStudentAndCourseGroup(id, courseGroupId);
+                    if (!existingEnrollment) {
+                        const enrollment = await enrollmentRepository.create({
+                            student_id: id,
+                            course_group_id: courseGroupId,
+                            status: 'active'
+                        });
+                        enrollments.push(enrollment);
+                    }
+                }
+
+                return {
+                    student: updatedStudent,
+                    newEnrollments: enrollments
+                };
+            }
+
+            return { student: updatedStudent };
         } catch (error) {
             throw error;
         }
