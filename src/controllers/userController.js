@@ -1,11 +1,11 @@
 const userService = require('../services/userService');
+const { Op } = require('sequelize');
 
 class UserController {
     async register(req, res, next) {
         try {
             const userData = req.body;
 
-            // Apenas admins podem criar outros usuários com papel de admin
             if (userData.role === 'admin' && req.userRole !== 'admin') {
                 return res.status(403).json({
                     status: 'error',
