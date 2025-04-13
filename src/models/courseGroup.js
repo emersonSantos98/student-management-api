@@ -56,11 +56,11 @@ module.exports = (sequelize, DataTypes) => {
         underscored: true,
         indexes: [
             {
-                name: 'idx_classes_start_date',
+                name: 'idx_course_groups_start_date',
                 fields: ['start_date']
             },
             {
-                name: 'idx_classes_end_date',
+                name: 'idx_course_groups_end_date',
                 fields: ['end_date']
             }
         ]

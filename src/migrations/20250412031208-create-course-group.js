@@ -38,10 +38,10 @@ module.exports = {
     });
 
     await queryInterface.addIndex('CourseGroups', ['start_date'], {
-      name: 'idx_classes_start_date'
+      name: 'idx_course_groups_start_date'
     });
     await queryInterface.addIndex('CourseGroups', ['end_date'], {
-      name: 'idx_classes_end_date'
+      name: 'idx_course_groups_end_date'
     });
   },
   async down(queryInterface, Sequelize) {
