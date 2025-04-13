@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Student.hasMany(models.Enrollment, {
+        foreignKey: 'student_id',
+        as: 'enrollments',
+      });
     }
   }
 
@@ -55,6 +58,24 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'Students',
     timestamps: false,
     underscored: true,
+    indexes: [
+      {
+        name: 'idx_students_ra',
+        fields: ['ra'],
+      },
+      {
+        name: 'idx_students_cpf',
+        fields: ['cpf'],
+      },
+      {
+        name: 'idx_students_email',
+        fields: ['email'],
+      },
+      {
+        name: 'idx_students_created_at',
+        fields: ['created_at'],
+      }
+    ]
   });
 
   return Student;
