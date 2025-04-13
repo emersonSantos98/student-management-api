@@ -24,7 +24,6 @@ class StudentRepository {
             throw error;
         }
     }
-
     async findById(id) {
         try {
             const student = await Student.findByPk(id);
@@ -45,7 +44,6 @@ class StudentRepository {
             throw error;
         }
     }
-
     async findStudentWithEnrollments(id) {
         try {
             const student = await Student.findByPk(id, {
@@ -72,7 +70,6 @@ class StudentRepository {
             throw error;
         }
     }
-
     async create(data) {
         try {
             return await Student.create(data);
@@ -80,7 +77,6 @@ class StudentRepository {
             throw error;
         }
     }
-
     async update(id, data) {
         try {
             const student = await this.findById(id);
@@ -92,7 +88,6 @@ class StudentRepository {
             throw error;
         }
     }
-
     async delete(id) {
         try {
             const student = await this.findById(id);
@@ -104,7 +99,6 @@ class StudentRepository {
             throw error;
         }
     }
-
     async checkExistingStudent(data) {
         try {
             const { cpf, ra, email } = data;
@@ -142,7 +136,6 @@ class StudentRepository {
             throw error;
         }
     }
-
 }
 
 module.exports = new StudentRepository();
