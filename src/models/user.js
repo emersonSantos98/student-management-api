@@ -54,6 +54,17 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'users',
     timestamps: false,
     underscored: true,
+    indexes: [
+      {
+        unique: true,
+        fields: ['email'],
+        name: 'idx_users_email',
+      },
+      {
+        fields: ['role'],
+        name: 'idx_users_role',
+      },
+    ]
   });
   return User;
 };
