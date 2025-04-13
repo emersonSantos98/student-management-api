@@ -1,4 +1,4 @@
-const { CourseGroup } = require('../models');
+const { CourseGroup, Enrollment, Student } = require('../models');
 
 const { NotFoundError } = require('../errors');
 
@@ -10,13 +10,38 @@ class CourseGroupRepository {
         try {
             const courseGroups = await CourseGroup.findAndCountAll({
                 where: filters,
+                include: [
+                    {
+                        model: Enrollment,
+                        as: 'enrollments',
+                        attributes: ['id', 'status', 'created_at', 'updated_at'],
+                        include: [
+                            {
+                                model: Student,
+                                as: 'student',
+                                attributes: ['id', 'name', 'email', 'created_at', 'updated_at']
+                            }
+                        ]
+                    }
+                ],
                 limit,
                 offset,
                 order: [['created_at', 'DESC']]
             });
 
+            const courseGroupsWithActiveCount = courseGroups.rows.map(group => {
+                const activeStudentsCount = group.enrollments.filter(
+                    enrollment => enrollment.status === 'active'
+                ).length;
+
+                return {
+                    ...group.toJSON(),
+                    activeStudentsCount
+                };
+            });
+
             return {
-                courseGroups: courseGroups.rows,
+                courseGroups: courseGroupsWithActiveCount,
                 total: courseGroups.count,
                 totalPages: Math.ceil(courseGroups.count / limit),
                 currentPage: page
@@ -26,15 +51,38 @@ class CourseGroupRepository {
         }
     }
 
+
     async findById(id) {
         try {
-            const courseGroup = await CourseGroup.findByPk(id);
+            const courseGroup = await CourseGroup.findByPk(id, {
+                include: [
+                    {
+                        model: Enrollment,
+                        as: 'enrollments',
+                        attributes: ['id', 'status', 'created_at', 'updated_at'],
+                        include: [
+                            {
+                                model: Student,
+                                as: 'student',
+                                attributes: ['id', 'name', 'email', 'created_at', 'updated_at']
+                            }
+                        ]
+                    }
+                ]
+            });
 
             if (!courseGroup) {
                 throw new NotFoundError('Turma não encontrada');
             }
 
-            return courseGroup;
+            const courseGroupWithActiveCount = {
+                ...courseGroup.toJSON(),
+                activeStudentsCount: courseGroup.enrollments.filter(
+                    enrollment => enrollment.status === 'active'
+                ).length
+            };
+
+            return courseGroupWithActiveCount;
         } catch (error) {
             throw error;
         }
