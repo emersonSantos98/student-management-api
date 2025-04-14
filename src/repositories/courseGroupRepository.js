@@ -118,10 +118,13 @@ class CourseGroupRepository {
 
     async delete(id) {
         try {
-            const courseGroup = await this.findById(id);
+            const courseGroup = await CourseGroup.findByPk(id);
+
+            if (!courseGroup) {
+                throw new NotFoundError('Turma não encontrada');
+            }
 
             await courseGroup.destroy();
-
             return true;
         } catch (error) {
             throw error;
