@@ -1,6 +1,7 @@
-'use strict';
-
-require('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config();
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+dotenv.config({ path: envFile });
 
 module.exports = {
   development: {
@@ -23,7 +24,8 @@ module.exports = {
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    dialect: 'mysql',
+    port: process.env.DB_PORT,
+    dialect: process.env.DB_DIALECT || 'mysql',
     logging: false,
     pool: {
       max: 5,
