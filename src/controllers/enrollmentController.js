@@ -31,6 +31,21 @@ class EnrollmentController {
         }
     }
 
+    async deleteEnrollment(req, res, next) {
+        try {
+            const { id } = req.params;
+            const enrollment = await EnrollmentService.deleteEnrollment(id);
+            return res.json({
+                object: 'enrollment',
+                status: 'success',
+                message: 'Matrícula excluída com sucesso',
+                data: enrollment
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }
 
 module.exports = new EnrollmentController();

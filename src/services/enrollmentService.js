@@ -62,6 +62,19 @@ class EnrollmentService {
         }
     }
 
+    async deleteEnrollment(id) {
+        try {
+            const enrollment = await enrollmentRepository.findById(id);
+            if (!enrollment) {
+                throw new NotFoundError('Matrícula');
+            }
+
+            return await enrollmentRepository.delete(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 module.exports = new EnrollmentService();
