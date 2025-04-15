@@ -95,40 +95,6 @@ class EnrollmentRepository {
         }
     }
 
-    async findByStudent(studentId) {
-        try {
-            return await Enrollment.findAll({
-                where: { student_id: studentId },
-                include: [
-                    {
-                        model: CourseGroup,
-                        as: 'courseGroup',
-                        attributes: ['id', 'name', 'start_date', 'end_date']
-                    }
-                ]
-            });
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async findByCourseGroup(courseGroupId) {
-        try {
-            return await Enrollment.findAll({
-                where: { course_group_id: courseGroupId },
-                include: [
-                    {
-                        model: Student,
-                        as: 'student',
-                        attributes: ['id', 'name', 'email']
-                    }
-                ]
-            });
-        } catch (error) {
-            throw error;
-        }
-    }
-
     async cancelEnrollment(studentId, courseGroupId) {
         try {
             const enrollment = await this.findByStudentAndCourseGroup(studentId, courseGroupId);
@@ -136,6 +102,16 @@ class EnrollmentRepository {
                 status: 'cancelled',
                 updated_at: new Date()
             });
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async delete(id) {
+        try {
+            const enrollment = await this.findById(id);
+            await enrollment.destroy();
+            return enrollment;
         } catch (error) {
             throw error;
         }

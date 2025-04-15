@@ -7,5 +7,6 @@ router.use(authMiddleware);
 
 router.post('/enroll', isAdmin, enrollmentController.enrollStudent);
 router.put('/cancel', isAdmin, enrollmentController.cancelEnrollment);
+router.delete('/:id', isAdmin, enrollmentController.deleteEnrollment);
 
 module.exports = router;

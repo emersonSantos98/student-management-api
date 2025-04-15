@@ -51,7 +51,6 @@ class CourseGroupRepository {
         }
     }
 
-
     async findById(id) {
         try {
             const courseGroup = await CourseGroup.findByPk(id, {
@@ -106,22 +105,31 @@ class CourseGroupRepository {
 
     async update(id, data) {
         try {
-            const courseGroup = await this.findById(id);
+            const courseGroup = await CourseGroup.findByPk(id);
+
+            if (!courseGroup) {
+                throw new NotFoundError('Turma não encontrada');
+            }
 
             await courseGroup.update(data);
 
-            return courseGroup;
+            const updatedCourseGroup = await this.findById(id);
+            return updatedCourseGroup;
         } catch (error) {
+            console.log('Error updating course group:', error);
             throw error;
         }
     }
 
     async delete(id) {
         try {
-            const courseGroup = await this.findById(id);
+            const courseGroup = await CourseGroup.findByPk(id);
+
+            if (!courseGroup) {
+                throw new NotFoundError('Turma não encontrada');
+            }
 
             await courseGroup.destroy();
-
             return true;
         } catch (error) {
             throw error;

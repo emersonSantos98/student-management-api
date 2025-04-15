@@ -18,15 +18,6 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date()
       },
-      {
-        id: uuidv4(),
-        name: 'Estudante',
-        email: 'student@example.com',
-        password_hash: passwordHash,
-        role: 'student',
-        created_at: new Date(),
-        updated_at: new Date()
-      }
     ], {});
   },
 
