@@ -10,6 +10,7 @@
     "migrate:production": "cross-env NODE_ENV=production npx sequelize-cli db:migrate",
     "migrate:undo": "sequelize-cli db:migrate:undo:all",
     "seed": "sequelize-cli db:seed:all",
+    "seed:production": "cross-env NODE_ENV=production npx sequelize-cli db:seed:all",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
