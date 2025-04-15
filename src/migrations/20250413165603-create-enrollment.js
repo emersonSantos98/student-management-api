@@ -15,7 +15,9 @@ module.exports = {
         references: {
           model: 'Students',
           key: 'id'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       course_group_id: {
         type: Sequelize.UUID,
@@ -23,7 +25,9 @@ module.exports = {
         references: {
           model: 'CourseGroups',
           key: 'id'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       enrollment_date: {
         type: Sequelize.DATE,
