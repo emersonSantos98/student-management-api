@@ -51,7 +51,6 @@ class CourseGroupRepository {
         }
     }
 
-
     async findById(id) {
         try {
             const courseGroup = await CourseGroup.findByPk(id, {
