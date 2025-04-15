@@ -16,7 +16,7 @@
     "test:coverage": "jest --coverage"
   },
   "keywords": [],
-  "author": "",
+  "author": "Emerson Santos",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",
