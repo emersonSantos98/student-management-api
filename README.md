@@ -67,8 +67,14 @@ API REST desenvolvida para gerenciar estudantes, turmas e matrículas.
       Senha: @123456
       Função: admin
    ```
-## 🌐 Versão Publicada
+## 📚 Documentação da API
 
-Você pode acessar a versão publicada do frontend da aplicação através do seguinte link:
+A documentação completa da API está disponível através do Swagger UI no seguinte endereço:
 
-[https://student-management-frontend-production.up.railway.app/](https://student-management-frontend-production.up.railway.app/)
+[https://student-management-api-production-8612.up.railway.app/api-docs/#/](https://student-management-api-production-8612.up.railway.app/api-docs/#/)
+
+Através desta interface você pode:
+- Visualizar todos os endpoints disponíveis
+- Testar as requisições diretamente pelo navegador
+- Consultar os modelos de payload e respostas
+- Ver os diferentes códigos de status e mensagens de erro
