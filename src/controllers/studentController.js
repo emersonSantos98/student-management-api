@@ -4,11 +4,12 @@ const { Op } = require('sequelize');
 class StudentController {
     async getAllStudents(req, res, next) {
         try {
-            const { page, limit, name, email } = req.query;
+            const { page, limit, name, email, ra } = req.query;
 
             const filters = {};
             if (name) filters.name = { [Op.like]: `%${name}%` };
-            if (email) filters.email = email;
+            if (email) filters.email = { [Op.like]: `%${email}%` };
+            if(ra) filters.ra = { [Op.like]: `%${ra}%` };
 
             const pagination = {
                 page: parseInt(page, 10) || 1,
