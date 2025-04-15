@@ -1,11 +1,11 @@
-'use strict';
-
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const routes = require('./src/routes/index');
 const {errorLogger, errorResponder, invalidPathHandler} = require('./src/middlewares/errorHandler');
+const swaggerUi = require('swagger-ui-express');
+const specs = require('./src/docs/swagger');
 const db = require('./src/models');
 
 const app = express();
@@ -26,6 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/api', routes);
 
 // Middleware para rotas inválidas
@@ -40,4 +41,7 @@ db.sequelize.authenticate()
     .catch(err => console.error('❌ Unable to connect to the database:', err));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server is running in ${process.env.NODE_ENV} mode`));
+app.listen(PORT, () => {
+    console.log(`🚀 Server is running in ${process.env.NODE_ENV} mode`);
+    console.log(`📚 Swagger documentation available at http://localhost:${PORT}/api-docs`);
+});
