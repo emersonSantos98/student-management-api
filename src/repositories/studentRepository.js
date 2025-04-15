@@ -1,4 +1,4 @@
-const { Student, Enrollment, Class } = require('../models');
+const { Student, Enrollment, CourseGroup } = require('../models');
 const { NotFoundError } = require('../errors');
 
 class StudentRepository {
@@ -9,13 +9,38 @@ class StudentRepository {
         try {
             const students = await Student.findAndCountAll({
                 where: filters,
+                include: [
+                    {
+                        model: Enrollment,
+                        as: 'enrollments',
+                        attributes: ['id', 'status', 'created_at', 'updated_at'],
+                        include: [
+                            {
+                                model: CourseGroup,
+                                as: 'courseGroup',
+                                attributes: ['id', 'name']
+                            }
+                        ]
+                    }
+                ],
                 limit,
                 offset,
                 order: [['created_at', 'DESC']]
             });
 
+            const studentsWithActiveCount = students.rows.map(student => {
+                const activeCourseCount = student.enrollments.filter(
+                    enrollment => enrollment.status === 'active'
+                ).length;
+
+                return {
+                    ...student.toJSON(),
+                    activeCourseCount
+                };
+            });
+
             return {
-                students: students.rows,
+                students: studentsWithActiveCount,
                 total: students.count,
                 totalPages: Math.ceil(students.count / limit),
                 currentPage: page
